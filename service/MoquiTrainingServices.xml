@@ -2,21 +2,21 @@
 <services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-3.xsd">
 
-    <!--   entity auto service  -->
-    <service verb="create" noun="MoquiTraining" type="entity-auto">
-        <in-parameters>
-            <auto-parameters entity-name="MoquiTraining" include="nonpk"/>
-            <parameter name="trainingName" required="true"/>
-            <parameter name="trainingDate" required="true">
-                <time-range after="now" format="mm/dd/yyyy"/>
-            </parameter>
-        </in-parameters>
-        <out-parameters>
-            <parameter name="trainingId"/>
-        </out-parameters>
-    </service>
+    <!-- Task-3     entity auto service  -->
+<!--    <service verb="create" noun="MoquiTraining" type="entity-auto">-->
+<!--        <in-parameters>-->
+<!--            <auto-parameters entity-name="MoquiTraining" include="nonpk"/>-->
+<!--            <parameter name="trainingName" required="true"/>-->
+<!--            <parameter name="trainingDate" required="true">-->
+<!--                <time-range after="now" format="mm/dd/yyyy"/>-->
+<!--            </parameter>-->
+<!--        </in-parameters>-->
+<!--        <out-parameters>-->
+<!--            <parameter name="trainingId"/>-->
+<!--        </out-parameters>-->
+<!--    </service>-->
 
-    <!--    Default Inline Service calls entity auto inline     -->
+    <!-- Task-3     Default Inline Service calls entity auto inline     -->
     <service verb="create" noun="MoquiTrainingDefaultInline">
         <in-parameters>
             <parameter name="trainingName" required="true"/>
@@ -34,7 +34,7 @@
         </actions>
     </service>
 
-    <!--    Groovy service call-->
+    <!-- Task-3     Groovy service call-->
     <service verb="create" noun="MoquiTrainingGroovy">
         <in-parameters>
             <auto-parameters entity-name="MoquiTraining" include="nonpk"/>
@@ -54,6 +54,57 @@
                 context.trainingId = training.trainingId
             </script>
         </actions>
+    </service>
+
+    <!--    Task-4 -->
+    <!--    Task 4- Find entity      -->
+    <!--    entity auto cannot be used here because- verb must be one of [create, update, store, delete] for entity-auto type services.-->
+    <service verb="find" noun="TrainingInfo">
+        <in-parameters>
+            <parameter name="trainingName" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="moquiTrainingDataList" type="list"/>
+        </out-parameters>
+        <actions>
+            <!--    returns entity list if found, else empty list-->
+            <entity-find entity-name="MoquiTraining" list="moquiTrainingDataList">
+                <econdition field-name="trainingName"/>
+                <select-field field-name="trainingName"/>
+                <select-field field-name="trainingId"/>
+                <select-field field-name="trainingDate"/>
+            </entity-find>
+        </actions>
+    </service>
+
+    <!--   Task 4- create or update entity      -->
+<!--    to use this service commented out create service from task 3-->
+    <service verb="store" noun="MoquiTraining" type="entity-auto">
+        <in-parameters>
+            <auto-parameters entity-name="MoquiTraining" include="nonpk"/>
+            <parameter name="trainingName" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="trainingId"/>
+        </out-parameters>
+<!--        <actions>-->
+<!--&lt;!&ndash;            not using actions as store is supported by entity auto&ndash;&gt;-->
+<!--            <entity-find entity-name="MoquiTraining" list="trainingInfo">-->
+<!--                <econdition field-name="trainingName" ignore-case="true"/>-->
+<!--            </entity-find>-->
+<!--            <if condition="trainingInfo">-->
+<!--                <then>-->
+<!--                    <set field="training" from="trainingInfo.first"></set>-->
+<!--                    <entity-set value-field="training" map="context"></entity-set>-->
+<!--                    <entity-update value-field="training"/>-->
+<!--                    <set field="trainingId" from="training.trainingId"></set>-->
+<!--                </then>-->
+<!--                <else>-->
+<!--                    <service-call name="create#MoquiTraining" in-map="context" out-map="context"/>-->
+<!--                </else>-->
+<!--            </if>-->
+<!--        </actions>-->
+
     </service>
 
 </services>
