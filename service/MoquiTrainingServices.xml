@@ -58,7 +58,7 @@
 
     <!--    Task-4 -->
     <!--    Task 4- Find entity      -->
-    <!--    entity auto cannot be used here because- verb must be one of [create, update, store, delete] for entity-auto type services.-->
+    <!--    entity auto cannot be used here because-verb must be one of [create, update, store, delete] for entity-auto type services.-->
     <service verb="find" noun="TrainingInfo">
         <in-parameters>
             <parameter name="trainingName" required="true"/>
@@ -79,7 +79,7 @@
 
     <!--   Task 4- create or update entity      -->
 <!--    to use this service commented out create service from task 3-->
-    <service verb="store" noun="MoquiTraining" type="entity-auto">
+    <service verb="update" noun="MoquiTraining" type="entity-auto">
         <in-parameters>
             <auto-parameters entity-name="MoquiTraining" include="nonpk"/>
             <parameter name="trainingName" required="true"/>
